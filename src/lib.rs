@@ -173,10 +173,6 @@ async fn is_already_posted(
             Err(err) => return Err(err),
         };
 
-        for p in &recent_posts {
-            println!("{}", p.post.name);
-        }
-
         // stop looking immediately if the newest post in the page is older than our expected post time
         if recent_posts.first().is_none() {
             break;
