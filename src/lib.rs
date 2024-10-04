@@ -83,6 +83,7 @@ pub async fn process_posts(Config { settings, post }: Config) -> Result<(), Box<
             name: post.title.clone(),
             body: post.body.clone(),
             url: post.link.clone(),
+            custom_thumbnail: post.thumbnail.clone(),
             ..Default::default()
         },
         jwt: None,
