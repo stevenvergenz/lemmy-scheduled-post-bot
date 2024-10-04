@@ -1,0 +1,15 @@
+[settings]
+instance = "lemmy.world"
+community = "memes"
+username_or_email = "test@example.com"
+password = "password"
+
+[[post]]
+title = "Aren't sandwiches great?"
+body = "So good, seriously."
+post_at = "2024-10-04 14:00:00-0700"
+
+[[post]]
+title = "A funny cat"
+link = "redgif.com/catpic"
+post_at = "2024-10-04 15:00:00-0700"
