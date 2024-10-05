@@ -13,5 +13,6 @@ pub struct Post {
     pub link: Option<String>,
     pub body: Option<String>,
     pub thumbnail: Option<String>,
+    pub alt_text: Option<String>,
     pub post_at: DateTime<Utc>,
 }

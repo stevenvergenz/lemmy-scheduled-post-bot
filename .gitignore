@@ -20,4 +20,6 @@ target/
 
 /target
 
-config.toml
+*.toml
+!Cargo.toml
+!sample.toml

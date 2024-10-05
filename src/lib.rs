@@ -33,7 +33,7 @@ pub async fn process_posts_from_file(config_file: &str) -> Result<(), Box<dyn st
 pub async fn process_posts(Config { settings, post }: Config) -> Result<(), Box<error::Error>> {
     // identify the post definition in the config whose scheduled post time most recently passed
     let now = Utc::now();
-    let post = post.iter()
+    let post = post.into_iter()
         .filter(|p| p.post_at.cmp(&now).is_le())
         .min_by_key(|p| now - p.post_at);
 
@@ -80,10 +80,11 @@ pub async fn process_posts(Config { settings, post }: Config) -> Result<(), Box<
     let res = client.create_post(LemmyRequest {
         body: CreatePost {
             community_id,
-            name: post.title.clone(),
-            body: post.body.clone(),
-            url: post.link.clone(),
-            custom_thumbnail: post.thumbnail.clone(),
+            name: post.title,
+            url: post.link,
+            body: post.body,
+            custom_thumbnail: post.thumbnail,
+            alt_text: post.alt_text,
             ..Default::default()
         },
         jwt: None,
