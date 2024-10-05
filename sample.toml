@@ -1,8 +1,23 @@
+# post destination info
 [settings]
 instance = "lemmy.world"
 community = "memes"
 username_or_email = "test@example.com"
 password = "password"
+enabled = false
+
+# defaults for omitted post fields
+[common]
+# time and title are required, though not used for the common post
+post_at = "0000-01-01 00:00:00Z"
+title = ""
+# don't need to specify all of them
+#link = ""
+#thumbnail = ""
+#alt_text = ""
+#body = ""
+
+# posts
 
 [[post]]
 title = "Aren't sandwiches great?"

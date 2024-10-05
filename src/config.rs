@@ -11,5 +11,6 @@ use super::{post::Post, settings::Settings};
 #[derive(Deserialize)]
 pub struct Config {
     pub settings: Settings,
+    pub common: Option<Post>,
     pub post: Vec<Post>,
 }

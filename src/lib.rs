@@ -30,14 +30,14 @@ pub async fn process_posts_from_file(config_file: &str) -> Result<(), Box<dyn st
     }
 }
 
-pub async fn process_posts(Config { settings, post }: Config) -> Result<(), Box<error::Error>> {
+pub async fn process_posts(Config { settings, common, post }: Config) -> Result<(), Box<error::Error>> {
     // identify the post definition in the config whose scheduled post time most recently passed
     let now = Utc::now();
     let post = post.into_iter()
         .filter(|p| p.post_at.cmp(&now).is_le())
         .min_by_key(|p| now - p.post_at);
 
-    let post = match post {
+    let mut post = match post {
         // if nothing to post, just exit
         None => {
             println!("Nothing to post");
@@ -45,6 +45,14 @@ pub async fn process_posts(Config { settings, post }: Config) -> Result<(), Box<
         }
         Some(p) => p,
     };
+
+    // apply default
+    if let Some(common) = common {
+        post.link = post.link.or(common.link);
+        post.thumbnail = post.thumbnail.or(common.thumbnail);
+        post.alt_text = post.alt_text.or(common.alt_text);
+        post.body = post.body.or(common.body);
+    }
 
     let mut client = LemmyClient::new(ClientOptions {
         domain: settings.instance.clone(),
