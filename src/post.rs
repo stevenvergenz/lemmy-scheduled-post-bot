@@ -48,6 +48,7 @@ impl Post {
 
         let mut fields = HashMap::new();
 
+        // add standard fields to the lookup
         if let Some(title) = resolve_default!(title, defaults.title) {
             fields.insert("title", toml::Value::String(title.clone()));
         }
@@ -64,12 +65,14 @@ impl Post {
             fields.insert("body", toml::Value::String(body.clone()));
         }
 
+        // add per-post custom fields to lookup
         for (k, v) in template_fields.iter() {
             if !fields.contains_key(k.as_str()) {
                 fields.insert(k, v.clone());
             }
         }
 
+        // add default custom fields to lookup
         if let Some(defaults) = defaults {
             for (k, v) in defaults.template_fields.iter() {
                 if !fields.contains_key(k.as_str()) {
@@ -81,6 +84,7 @@ impl Post {
         Post {
             post_at,
             options: PostOptions {
+                // evaluate template fields in standard fields
                 title: resolve_default!(title, defaults.title)
                     .map(|x| Template(x, &fields).into()),
                 link: resolve_default!(link, defaults.link)

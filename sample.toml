@@ -20,14 +20,14 @@ body = "Today's secret word is: {secret}"
 #alt_text = ""
 
 
-# a regular post
 [[post]]
 post_at = "2024-10-04 14:00:00-0700"
+# these override the values from the defaults block
 title = "What's today's secret?"
 body = "I never find out about these things."
 
 
-# a post that fills out the default body with a value
 [[post]]
 post_at = "2024-10-04 15:00:00-0700"
+# this is interpolated into the default body
 secret = "banana"
