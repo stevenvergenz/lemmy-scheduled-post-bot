@@ -7,7 +7,10 @@ Licensed under the terms of the General Public License 3.0 or later
 mod config;
 mod error;
 mod post;
+mod resolve_default;
 mod settings;
+mod template;
+mod util;
 
 use std::fs;
 use chrono::Utc;
@@ -30,14 +33,14 @@ pub async fn process_posts_from_file(config_file: &str) -> Result<(), Box<dyn st
     }
 }
 
-pub async fn process_posts(Config { settings, common, post }: Config) -> Result<(), Box<error::Error>> {
+pub async fn process_posts(Config { settings, defaults, post }: Config) -> Result<(), Box<error::Error>> {
     // identify the post definition in the config whose scheduled post time most recently passed
     let now = Utc::now();
     let post = post.into_iter()
         .filter(|p| p.post_at.cmp(&now).is_le())
         .min_by_key(|p| now - p.post_at);
 
-    let mut post = match post {
+    let post = match post {
         // if nothing to post, just exit
         None => {
             println!("Nothing to post");
@@ -46,12 +49,11 @@ pub async fn process_posts(Config { settings, common, post }: Config) -> Result<
         Some(p) => p,
     };
 
-    // apply default
-    if let Some(common) = common {
-        post.link = post.link.or(common.link);
-        post.thumbnail = post.thumbnail.or(common.thumbnail);
-        post.alt_text = post.alt_text.or(common.alt_text);
-        post.body = post.body.or(common.body);
+    let post = post.evaluate(defaults.as_ref());
+
+    if !settings.enabled.unwrap_or(false) {
+        println!("Next post is {}", util::fos(&post.options.title));
+        return Ok(());
     }
 
     let mut client = LemmyClient::new(ClientOptions {
@@ -70,29 +72,26 @@ pub async fn process_posts(Config { settings, common, post }: Config) -> Result<
     // verify it hasn't already been posted
     let check_res = is_already_posted(&post, &client, &settings.community).await;
     if let Ok(true) = check_res {
-        println!("Next post has already been posted");
+        println!("Post with title {} has already been posted", util::fos(&post.options.title));
         return Ok(());
     }
     else if let Err(err) = check_res {
         return error::from_lemmy_error(err);
     }
 
-    if !settings.enabled.unwrap_or(false) {
-        println!("Ready to make post with title '{}' to {}/c/{}", post.title, settings.instance, settings.community);
-        return Ok(());
-    }
-    else {
-        println!("Making post with title '{}' to {}/c/{}", post.title, settings.instance, settings.community);
-    }
+    println!("Making post with title {} to {}/c/{}",
+        util::fos(&post.options.title),
+        settings.instance,
+        settings.community);
 
     let res = client.create_post(LemmyRequest {
         body: CreatePost {
             community_id,
-            name: post.title,
-            url: post.link,
-            body: post.body,
-            custom_thumbnail: post.thumbnail,
-            alt_text: post.alt_text,
+            name: post.options.title.expect("Posts must have a title!"),
+            url: post.options.link,
+            body: post.options.body,
+            custom_thumbnail: post.options.thumbnail,
+            alt_text: post.options.alt_text,
             ..Default::default()
         },
         jwt: None,
@@ -211,5 +210,10 @@ async fn is_already_posted(
         }
     }
 
-    Ok(posts.iter().find(|p| p.post.name == post.title).is_some())
+    Ok(posts.iter()
+        .find(|p| {
+            Some(&p.post.name) == post.options.title.as_ref()
+        })
+        .is_some(),
+    )
 }

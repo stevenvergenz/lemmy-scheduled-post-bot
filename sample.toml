@@ -6,25 +6,28 @@ username_or_email = "test@example.com"
 password = "password"
 enabled = false
 
+
 # defaults for omitted post fields
-[common]
-# time and title are required, though not used for the common post
-post_at = "0000-01-01 00:00:00Z"
-title = ""
+[defaults]
+title = "Today's secret word"
+
+# can use template strings to customize per post
+body = "Today's secret word is: {secret}"
+
 # don't need to specify all of them
 #link = ""
 #thumbnail = ""
 #alt_text = ""
-#body = ""
 
-# posts
 
+# a regular post
 [[post]]
-title = "Aren't sandwiches great?"
-body = "So good, seriously."
 post_at = "2024-10-04 14:00:00-0700"
+title = "What's today's secret?"
+body = "I never find out about these things."
 
+
+# a post that fills out the default body with a value
 [[post]]
-title = "A funny cat"
-link = "redgif.com/catpic"
 post_at = "2024-10-04 15:00:00-0700"
+secret = "banana"

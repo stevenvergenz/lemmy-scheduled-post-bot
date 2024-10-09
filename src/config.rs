@@ -6,11 +6,11 @@ Licensed under the terms of the General Public License 3.0 or later
 
 use serde::Deserialize;
 
-use super::{post::Post, settings::Settings};
+use super::{post::{Post, PostOptions}, settings::Settings};
 
 #[derive(Deserialize)]
 pub struct Config {
     pub settings: Settings,
-    pub common: Option<Post>,
+    pub defaults: Option<PostOptions>,
     pub post: Vec<Post>,
 }
