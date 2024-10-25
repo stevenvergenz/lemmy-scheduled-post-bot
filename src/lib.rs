@@ -20,7 +20,7 @@ use lemmy_client::{
     }, ClientOptions, LemmyClient, LemmyRequest
 };
 pub use config::Config;
-pub use post::Post;
+pub use post::{Post, PostOptions};
 pub use settings::Settings;
 
 /// Loads the supplied config file and passes the result to [process_posts].
