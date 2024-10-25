@@ -4,7 +4,7 @@ lemmy-scheduled-post-bot
 Make posts to Lemmy based on the next configured post in a [TOML file](https://toml.io).
 
 1. Set up a configuration file as described below.
-1. Run this program with that file as an argument. E.g. `cargo run ./sample.toml`
+1. Run this program with that file as an argument, e.g. `lemmy-scheduled-post-bot ./sample.toml`.
 
 This program then does the following:
 
@@ -12,6 +12,7 @@ This program then does the following:
 1. Checks to see if a post with the same instance/community/user/title has already been published, and if so exits early.
 1. Publishes the post.
 
+Note that this does not run as a service, and must be invoked directly to run. It's recommended to use in conjunction with `cron` or the Windows Task Scheduler.
 
 Configuration
 --------------
