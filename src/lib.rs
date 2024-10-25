@@ -19,10 +19,13 @@ use lemmy_client::{
         community::GetCommunity, lemmy_db_schema::{newtypes::CommunityId, SortType}, lemmy_db_views::structs::PostView, person::{Login, LoginResponse}, post::{CreatePost, GetPosts, GetPostsResponse}, LemmyErrorType
     }, ClientOptions, LemmyClient, LemmyRequest
 };
-use config::Config;
-use post::Post;
-use settings::Settings;
+pub use config::Config;
+pub use post::Post;
+pub use settings::Settings;
 
+/// Loads the supplied config file and passes the result to [process_posts].
+/// # Arguments
+/// * `config_file` - A filesystem path to a config file
 pub async fn process_posts_from_file(config_file: &str) -> Result<(), Box<dyn std::error::Error>> {
     let config_str = fs::read_to_string(config_file)?;
     let config: Config = toml::from_str(&config_str)?;
@@ -33,6 +36,9 @@ pub async fn process_posts_from_file(config_file: &str) -> Result<(), Box<dyn st
     }
 }
 
+/// Publish the next post from the supplied config
+/// # Arguments
+/// * `config` - A [Config] object
 pub async fn process_posts(Config { settings, defaults, post }: Config) -> Result<(), Box<error::Error>> {
     // identify the post definition in the config whose scheduled post time most recently passed
     let now = Utc::now();

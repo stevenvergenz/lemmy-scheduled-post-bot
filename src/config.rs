@@ -8,9 +8,16 @@ use serde::Deserialize;
 
 use super::{post::{Post, PostOptions}, settings::Settings};
 
+/// Contains the necessary information to make a post to a Lemmy server
 #[derive(Deserialize)]
 pub struct Config {
+
+    /// Post destination information and general settings
     pub settings: Settings,
+
+    /// Fields in this post will be used if they are missing from a post
     pub defaults: Option<PostOptions>,
+
+    /// A list of scheduled posts
     pub post: Vec<Post>,
 }
