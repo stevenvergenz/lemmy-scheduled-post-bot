@@ -1,7 +1,7 @@
 [package]
 name = "lemmy-scheduled-post-bot"
 description = "Make posts to Lemmy based on the next configured post in a TOML file"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "GPL-3.0-or-later"
 authors = ["Steven Vergenz <1882376+stevenvergenz@users.noreply.github.com>"]
