@@ -48,3 +48,9 @@ Templating
 -----------
 
 The post fields support limited template substitution. Supply custom fields in the `[defaults]` or `[[post]]` sections, and reference them within the post fields within braces like so: `"My name is {name}."`. Templating is not recursive, and only the defined post fields will be interpolated. See [sample.toml](./sample.toml) for a full example.
+
+License
+--------
+
+Copyright (C) 2024 Steven Vergenz
+Licensed under the terms of the General Public License 3.0 or later

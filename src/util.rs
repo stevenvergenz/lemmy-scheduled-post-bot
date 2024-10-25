@@ -1,3 +1,9 @@
+/*
+Lemmy Scheduled Post Bot - makes Lemmy posts on a schedule
+Copyright (C) 2024 Steven Vergenz
+Licensed under the terms of the General Public License 3.0 or later
+*/
+
 use std::fmt::{self, Display, Formatter};
 
 pub struct OptionString<'a>(&'a Option<String>);

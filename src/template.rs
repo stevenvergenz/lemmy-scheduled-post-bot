@@ -1,3 +1,9 @@
+/*
+Lemmy Scheduled Post Bot - makes Lemmy posts on a schedule
+Copyright (C) 2024 Steven Vergenz
+Licensed under the terms of the General Public License 3.0 or later
+*/
+
 use std::collections::HashMap;
 use std::convert::Into;
 use std::fmt::{self, Display, Formatter};
